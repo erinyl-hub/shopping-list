@@ -343,7 +343,7 @@ public class ShoppingItemTests : IClassFixture<ShoppingListItemFixture>
             Quantity = 10
         };
         // Act
-        var actual = service.Add(name, amount, desc); 
+        var actual = service.Add(name, amount, desc);
 
         // Assert
         Assert.Equal(expected.Name, actual.Name);
@@ -363,15 +363,15 @@ public class ShoppingItemTests : IClassFixture<ShoppingListItemFixture>
             Quantity = 10
         };
         // Act
-        var actual = service.Add("Apples", 10, "Pink Lady"); 
+        var actual = service.Add("Apples", 10, "Pink Lady");
 
         // Assert
         Assert.Equal(expected.Name, actual.Name);
         Assert.Equal(expected.Notes, actual.Notes);
         Assert.Equal(expected.Quantity, actual.Quantity);
     }
-    
-    
+
+
     [Fact]
     public void Testing_SaveObjectToList()
     {
@@ -385,23 +385,41 @@ public class ShoppingItemTests : IClassFixture<ShoppingListItemFixture>
         // Assert
 
         Assert.Contains(expected, result);
-        
+
 
     }
+
     [Fact]
     public void Has_Guid_CorrectId()
     {
         //Arrange
         var sut = new ShoppingListService();
         var result = sut.Add("Appeles", 10, "Pink Lady");
-        
+
         //Act
         var expected = sut.GetById(result.Id);
-        
+
         //Assert
         Assert.Equal(expected.Id, result.Id);
     }
-    
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(10)]
+    [InlineData(100)]
+    public void Testing_AddExpansion(int amount)
+    {
+        // Arrange
+        var service = new ShoppingListService();
+        var expected = amount;
+        // Act
+        for (int i = 0; i < amount; i++)
+            service.Add("test", 0, "test");
+        var actual = service.GetAll();
+        // Assert
+        Assert.Equal(amount, actual.Count);
+    }
+
     [Theory]
     [InlineData(1)]
     [InlineData(0)]
@@ -410,21 +428,65 @@ public class ShoppingItemTests : IClassFixture<ShoppingListItemFixture>
     {
         //Arrange
         var sut = new ShoppingListService();
-        
+
         for (int i = 0; i < value; i++)
         {
             sut.Add("Appeles", 10, "Pink Lady");
-            
+
         }
 
         var resultItems = sut.GetAll();
         var result = resultItems[0];
-        
+
         //Act
         var expected = sut.GetById(result.Id);
-        
+
         //Assert
         Assert.Equal(expected.Id, result.Id);
+    }
+
+    [Fact]
+    public void ExpectTrueOnDeletedId()
+    {
+        int value = 5;
+        //Arrange
+        var sut = new ShoppingListService();
+        for (int i = 0; i < value; i++)
+        {
+            sut.Add("Appeles", 2, "Red");
+        }
+
+        int elmentToRemove =  Random.Shared.Next(1, (value - 2));
+        var expectedToRemove = sut.GetAll()[elmentToRemove].Id;
+
+        //Act
+        var expected = sut.Delete(expectedToRemove);
+        
+        //Assert
+
+        Assert.True(expected);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(100)]
+    public void ExpectUninterruptedArray(int toremove)
+    {
+        //Arrange
+        var sut = new ShoppingListService();
+        for(int i = 0; i < toremove*2; i++)
+        {
+            sut.Add("item"+i.ToString(), 2, "Desc");
+        }
+        
+
+        for (int i = 0; i < toremove; i++)
+        {
+            sut.Delete(sut.GetAll()[Random.Shared.Next(0, (toremove*2 - i))].Id);
+        }
+        
+        Assert.All(sut.GetAll(), (it) => Assert.NotNull(it));
     }
     
 

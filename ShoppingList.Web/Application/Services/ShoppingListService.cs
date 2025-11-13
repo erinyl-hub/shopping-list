@@ -12,14 +12,20 @@ public class ShoppingListService : IShoppingListService
     {
         // Initialize with demo data for UI demonstration
         // TODO: Students can remove or comment this out when running unit tests
-        _items = GenerateDemoItems();
-        _nextIndex = 4; // We have 4 demo items initialized
+        // _items = GenerateDemoItems();
+        _nextIndex = 0; // We have 4 demo items initialized
     }
 
     public IReadOnlyList<ShoppingItem> GetAll()
     {
         // TODO: Students - Return all items from the array (up to _nextIndex)
-        return _items;
+        ShoppingItem[] localitems = new ShoppingItem[_nextIndex];
+        for (int i = 0; i < _nextIndex; i++)
+        {
+            localitems[i] = _items[i];
+        }
+
+        return localitems;
     }
 
     public ShoppingItem? GetById(string id)
@@ -39,18 +45,24 @@ public class ShoppingListService : IShoppingListService
     public ShoppingItem? Add(string name, int quantity, string? notes)
     {
         // TODO: Students - Implement this method
-        Console.WriteLine(name);
-        Console.WriteLine(quantity);
-        Console.WriteLine(notes);
+
+        //instantiate item
 
         var it = new ShoppingItem()
         {
             Name = name,
             Quantity = quantity,
             Notes = notes
-        };
-        // Return the created item
-        _items[0] = it;
+        };        
+        //look for empty spot
+        
+        if(_nextIndex == (_items.Length - 1))
+        {
+            Array.Resize(ref _items, _items.Length *2);
+        }
+        
+        _items[_nextIndex] = it;
+        _nextIndex++;
         return it;
     }
 
@@ -64,8 +76,33 @@ public class ShoppingListService : IShoppingListService
     public bool Delete(string id)
     {
         // TODO: Students - Implement this method
-        // Return true if deleted, false if not found
+        for(int i = 0; i < _nextIndex-1; i++)
+            if (_items[i].Id == id)
+            {
+                _items[i] = null;
+                return true;
+            }
+
+        for (int i = 0; i < _nextIndex - 1; i++)
+        {
+            if (_items[i] == null)
+            {
+                MoveItem(i);
+                return true;
+            }
+            
+        }
+        
         return false;
+    }
+
+    private void MoveItem(int start)
+    {
+        _nextIndex--;
+        for (int i = start; i < _nextIndex - 1; i++)
+        {
+            _items[i] = _items[i + 1];
+        }
     }
 
     public IReadOnlyList<ShoppingItem> Search(string query)
