@@ -1,0 +1,7 @@
+﻿@media (max-width: 640px) {
+    .item-row { position: relative; overflow: hidden; }
+    /*.item-row::before {*/
+    /*    content: "Swipe → för handlat";*/
+    /*    position: absolute; left: 12px; top: 8px; color: #64748b; font-size: .8rem;*/
+    /*}*/
+}

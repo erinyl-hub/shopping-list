@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingList.Web", "ShoppingList.Web\ShoppingList.Web.csproj", "{72F91F1D-12D4-44FF-BF5F-3BC353CD0B2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingList.Tests", "ShoppingList.Tests\ShoppingList.Tests.csproj", "{EA0D1CF2-2E5C-48B5-92CD-98808F7D1035}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72F91F1D-12D4-44FF-BF5F-3BC353CD0B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72F91F1D-12D4-44FF-BF5F-3BC353CD0B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72F91F1D-12D4-44FF-BF5F-3BC353CD0B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72F91F1D-12D4-44FF-BF5F-3BC353CD0B2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA0D1CF2-2E5C-48B5-92CD-98808F7D1035}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA0D1CF2-2E5C-48B5-92CD-98808F7D1035}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA0D1CF2-2E5C-48B5-92CD-98808F7D1035}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA0D1CF2-2E5C-48B5-92CD-98808F7D1035}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

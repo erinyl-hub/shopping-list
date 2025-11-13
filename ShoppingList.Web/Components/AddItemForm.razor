@@ -1,0 +1,47 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+<div class="card add-form">
+    <EditForm Model="@model" OnValidSubmit="@Submit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="row">
+            <InputText class="input" placeholder="Artikel" @bind-Value="model.Name" />
+            <InputNumber class="input qty" @bind-Value="model.Quantity" />
+        </div>
+        <div class="row">
+            <InputText class="input" placeholder="Anteckningar (valfritt)" @bind-Value="model.Notes" />
+        </div>
+
+        <div class="validation-messages">
+            <ValidationMessage For="() => model.Name" />
+            <ValidationMessage For="() => model.Quantity" />
+        </div>
+
+        <button class="btn primary" type="submit">Lägg till</button>
+    </EditForm>
+</div>
+
+@code {
+    public class AddItemModel
+    {
+        [Required]
+        public string Name { get; set; } = string.Empty;
+        [Range(1, int.MaxValue)]
+        public int Quantity { get; set; } = 1;
+        public string? Notes { get; set; }
+    }
+
+    [Parameter] public EventCallback<(string name, int quantity, string? notes)> OnAdd { get; set; }
+
+    private AddItemModel model = new();
+
+    private async Task Submit()
+    {
+        var name = model.Name?.Trim() ?? string.Empty;
+        var notes = string.IsNullOrWhiteSpace(model.Notes) ? null : model.Notes!.Trim();
+        await OnAdd.InvokeAsync((name, model.Quantity, notes));
+        model = new();
+        StateHasChanged();
+    }
+}

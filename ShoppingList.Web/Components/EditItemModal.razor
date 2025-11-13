@@ -1,0 +1,52 @@
+﻿@if (Visible)
+{
+    <div class="modal-backdrop">
+        <div class="modal">
+            <h3>Redigera artikel</h3>
+            <EditForm Model="@editModel" OnValidSubmit="Save">
+                <DataAnnotationsValidator />
+                <input class="input" @bind="editModel.Name" />
+                <input class="input qty" type="number" min="1" @bind="editModel.Quantity" />
+                <input class="input" @bind="editModel.Notes" />
+                <div class="actions">
+                    <button class="btn primary" type="submit">Spara</button>
+                    <button class="btn" type="button" @onclick="Close">Avbryt</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool Visible { get; set; }
+    [Parameter] public ShoppingItem? Item { get; set; }
+    [Parameter] public EventCallback<ShoppingItem> OnSave { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private ShoppingItem editModel = new();
+
+    protected override void OnParametersSet()
+    {
+        if (Item != null)
+        {
+            editModel = new ShoppingItem
+            {
+                Id = Item.Id,
+                Name = Item.Name,
+                Quantity = Item.Quantity,
+                Notes = Item.Notes,
+                IsPurchased = Item.IsPurchased
+            };
+        }
+    }
+
+    private async Task Save()
+    {
+        await OnSave.InvokeAsync(editModel);
+    }
+
+    private async Task Close()
+    {
+        await OnClose.InvokeAsync();
+    }
+}

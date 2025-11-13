@@ -1,0 +1,22 @@
+﻿@inherits LayoutComponentBase
+
+<div class="app-container">
+    <header class="app-header">
+        <h1>ShoppingList</h1>
+    </header>
+
+    <main class="app-main">
+        @Body
+    </main>
+    
+    <footer class="app-footer">
+        <span>© @(DateTime.Now.Year) ShoppingList</span>
+    </footer>
+</div>
+
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>

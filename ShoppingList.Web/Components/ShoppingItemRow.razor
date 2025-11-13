@@ -1,0 +1,38 @@
+﻿<div class="item-row @(Item.IsPurchased ? "purchased" : "") @(IsDragging ? "dragging" : "")"
+     data-item-id="@Item.Id"
+     draggable="true"
+     @ondragstart="() => OnDragStart.InvokeAsync(Item.Id)"
+     @ondragover="OnDragOver"
+     @ondragover:preventDefault="true"
+     @ondrop="() => OnDrop.InvokeAsync(Item.Id)"
+     @ondragend="OnDragEnd">
+    
+    <div class="drag-handle">☰</div>
+    
+    <div class="left">
+        <button class="check" @onclick="() => OnTogglePurchased.InvokeAsync(Item.Id)">
+            @(Item.IsPurchased ? "✓" : "○")
+        </button>
+        <div class="info">
+            <div class="name">@Item.Name</div>
+            <div class="meta">Antal: @Item.Quantity @if (!string.IsNullOrWhiteSpace(Item.Notes)) { <span>• @Item.Notes</span> }</div>
+        </div>
+    </div>
+    <div class="actions">
+        <button class="btn" @onclick="() => OnEdit.InvokeAsync(Item.Id)">Redigera</button>
+        <button class="btn danger" @onclick="() => OnDelete.InvokeAsync(Item.Id)">Ta bort</button>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public ShoppingItem Item { get; set; } = default!;
+    [Parameter] public EventCallback<string> OnTogglePurchased { get; set; }
+    [Parameter] public EventCallback<string> OnDelete { get; set; }
+    [Parameter] public EventCallback<string> OnEdit { get; set; }
+    [Parameter] public EventCallback<string> OnDragStart { get; set; }
+    [Parameter] public EventCallback OnDragOver { get; set; }
+    [Parameter] public EventCallback<string> OnDrop { get; set; }
+    [Parameter] public EventCallback OnDragEnd { get; set; }
+    [Parameter] public bool IsDragging { get; set; }
+}

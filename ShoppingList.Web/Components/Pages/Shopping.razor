@@ -1,0 +1,163 @@
+﻿@page "/shopping"
+@using ShoppingList.Application.Interfaces
+@inject IShoppingListService Service
+@inject IJSRuntime JS
+
+<h2>Shoppinglista</h2>
+
+<AddItemForm OnAdd="HandleAdd"/>
+
+<div class="controls">
+    <input class="search" placeholder="Sök..." @bind="search" @bind:event="oninput"/>
+    <button class="btn" @onclick="ClearPurchased">Rensa handlade</button>
+</div>
+
+<div class="list-container">
+    @if (items is null)
+    {
+        <p>Laddar...</p>
+    }
+    else if (!items.Any())
+    {
+        <p>Inga artiklar. Lägg till din första!</p>
+    }
+    else
+    {
+        foreach (var item in FilteredItems)
+        {
+            <ShoppingItemRow Item="item"
+                             OnTogglePurchased="TogglePurchased"
+                             OnDelete="DeleteItem"
+                             OnEdit="StartEdit"
+                             OnDragStart="HandleDragStart"
+                             OnDragOver="HandleDragOver"
+                             OnDrop="HandleDrop"
+                             OnDragEnd="HandleDragEnd"
+                             IsDragging="item.Id == draggedItemId"/>
+        }
+    }
+</div>
+
+<EditItemModal Visible="@showEditModal"
+               Item="@editingItem"
+               OnSave="SaveEdit"
+               OnClose="() => showEditModal = false"/>
+
+@code {
+    private List<ShoppingItem>? items;
+    private string search = string.Empty;
+    private bool showEditModal = false;
+    private ShoppingItem? editingItem;
+
+    private IReadOnlyList<ShoppingItem> FilteredItems => Service.Search(search);
+
+    private string? draggedItemId = null;
+
+    protected override void OnInitialized()
+    {
+        var loaded = Service.GetAll();
+        items = loaded?.ToList() ?? new();
+    }
+
+    private void HandleAdd((string name, int quantity, string? notes) input)
+    {
+        Console.WriteLine("HandleAdd fired");
+        var created = Service.Add(input.name, input.quantity, input.notes);
+        if (created != null)
+        {
+            items!.Add(created);
+        }
+    }
+
+    private void TogglePurchased(string id)
+    {
+        var ok = Service.TogglePurchased(id);
+        if (ok && items is not null)
+        {
+            var updated = Service.GetById(id);
+            if (updated != null)
+            {
+                var idx = items.FindIndex(x => x.Id == id);
+                if (idx >= 0)
+                {
+                    items[idx] = updated;
+                }
+            }
+        }
+    }
+
+    private void DeleteItem(string id)
+    {
+        var ok = Service.Delete(id);
+        if (ok && items is not null)
+        {
+            items.RemoveAll(x => x.Id == id);
+        }
+    }
+
+    private void ClearPurchased()
+    {
+        var count = Service.ClearPurchased();
+        if (count > 0 && items is not null)
+        {
+            items.RemoveAll(x => x.IsPurchased);
+        }
+    }
+
+    private void StartEdit(string id)
+    {
+        editingItem = items?.FirstOrDefault(x => x.Id == id);
+        showEditModal = true;
+    }
+
+    private void SaveEdit(ShoppingItem updated)
+    {
+        var saved = Service.Update(updated.Id, updated.Name, updated.Quantity, updated.Notes);
+        if (saved != null && items != null)
+        {
+            var idx = items.FindIndex(x => x.Id == saved.Id);
+            if (idx >= 0) items[idx] = saved;
+        }
+
+        showEditModal = false;
+    }
+
+    private void HandleDragStart(string id)
+    {
+        draggedItemId = id;
+    }
+
+    private void HandleDragOver()
+    {
+    }
+
+    private void HandleDrop(string targetId)
+    {
+        if (draggedItemId == null || draggedItemId == targetId || items == null)
+            return;
+
+        var draggedIndex = items.FindIndex(x => x.Id == draggedItemId);
+        var targetIndex = items.FindIndex(x => x.Id == targetId);
+
+        if (draggedIndex < 0 || targetIndex < 0)
+            return;
+
+// Reorder in local list
+        var draggedItem = items[draggedIndex];
+        items.RemoveAt(draggedIndex);
+        items.Insert(targetIndex, draggedItem);
+
+// Persist to service
+        var newOrder = items.Select(i => i.Id).ToList();
+        Service.Reorder(newOrder);
+
+        draggedItemId = null;
+    }
+
+    private void HandleDragEnd()
+    {
+        draggedItemId = null;
+    }
+
+
+}
