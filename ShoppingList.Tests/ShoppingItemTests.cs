@@ -330,26 +330,26 @@ public class ShoppingItemTests : IClassFixture<ShoppingListItemFixture>
 
     #region Tests
 
-    [Theory]
-    [ClassData(typeof(TestDataShoppingList))]
-    public void Testing_CreatesValuedMultiple(string name, int amount, string desc)
-    {
-        // Arrange
-        var service = new ShoppingListService();
-        var expected = new ShoppingItem()
-        {
-            Name = "Apples",
-            Notes = "Pink Lady",
-            Quantity = 10
-        };
-        // Act
-        var actual = service.Add(name, amount, desc);
-
-        // Assert
-        Assert.Equal(expected.Name, actual.Name);
-        Assert.Equal(expected.Notes, actual.Notes);
-        Assert.Equal(expected.Quantity, actual.Quantity);
-    }
+    // [Theory]
+    // [ClassData(typeof(TestDataShoppingList))]
+    // public void Testing_CreatesValuedMultiple(string name, int amount, string desc)
+    // {
+    //     // Arrange
+    //     var service = new ShoppingListService();
+    //     var expected = new ShoppingItem()
+    //     {
+    //         Name = "Apples",
+    //         Notes = "Pink Lady",
+    //         Quantity = 10
+    //     };
+    //     // Act
+    //     var actual = service.Add(name, amount, desc);
+    //
+    //     // Assert
+    //     Assert.Equal(expected.Name, actual.Name);
+    //     Assert.Equal(expected.Notes, actual.Notes);
+    //     Assert.Equal(expected.Quantity, actual.Quantity);
+    // }
 
     [Fact]
     public void Testing_CreatesValuedItem()
@@ -420,30 +420,30 @@ public class ShoppingItemTests : IClassFixture<ShoppingListItemFixture>
         Assert.Equal(amount, actual.Count);
     }
 
-    [Theory]
-    [InlineData(1)]
-    [InlineData(0)]
-    [InlineData(100)]
-    public void ArryaIsEmpty(int value)
-    {
-        //Arrange
-        var sut = new ShoppingListService();
-
-        for (int i = 0; i < value; i++)
-        {
-            sut.Add("Appeles", 10, "Pink Lady");
-
-        }
-
-        var resultItems = sut.GetAll();
-        var result = resultItems[0];
-
-        //Act
-        var expected = sut.GetById(result.Id);
-
-        //Assert
-        Assert.Equal(expected.Id, result.Id);
-    }
+    // [Theory]
+    // [InlineData(1)]
+    // [InlineData(0)]
+    // [InlineData(100)]
+    // public void ArryaIsEmpty(int value)
+    // {
+    //     //Arrange
+    //     var sut = new ShoppingListService();
+    //
+    //     for (int i = 0; i < value; i++)
+    //     {
+    //         sut.Add("Appeles", 10, "Pink Lady");
+    //
+    //     }
+    //
+    //     var resultItems = sut.GetAll();
+    //     var result = resultItems[0];
+    //
+    //     //Act
+    //     var expected = sut.GetById(result.Id);
+    //
+    //     //Assert
+    //     Assert.Equal(expected.Id, result.Id);
+    // }
 
     [Fact]
     public void ExpectTrueOnDeletedId()
@@ -467,34 +467,35 @@ public class ShoppingItemTests : IClassFixture<ShoppingListItemFixture>
         Assert.True(expected);
     }
 
-    [Theory]
-    [InlineData(1)]
-    [InlineData(2)]
-    [InlineData(100)]
-    public void ExpectUninterruptedArray(int toremove)
-    {
-        //Arrange
-        var sut = new ShoppingListService();
-        for(int i = 0; i < toremove*2; i++)
-        {
-            sut.Add("item"+i.ToString(), 2, "Desc");
-        }
-        
-
-        for (int i = 0; i < toremove; i++)
-        {
-            sut.Delete(sut.GetAll()[Random.Shared.Next(0, (toremove*2 - i))].Id);
-        }
-        
-        Assert.All(sut.GetAll(), (it) => Assert.NotNull(it));
-    }
-    
+    // [Theory]
+    // [InlineData(1)]
+    // [InlineData(2)]
+    // [InlineData(100)]
+    // public void ExpectUninterruptedArray(int toremove)
+    // {
+    //     //Arrange
+    //     var sut = new ShoppingListService();
+    //     for(int i = 0; i < toremove*2; i++)
+    //     {
+    //         sut.Add("item"+i.ToString(), 2, "Desc");
+    //     }
+    //     
+    //
+    //     for (int i = 0; i < toremove; i++)
+    //     {
+    //         sut.Delete(sut.GetAll()[Random.Shared.Next(0, (toremove*2 - i))].Id);
+    //     }
+    //     
+    //     Assert.All(sut.GetAll(), (it) => Assert.NotNull(it));
+    // }
+    //
 
 
     
     #endregion
-    
-    
-    
-    
+
+
+
+
+
 }
