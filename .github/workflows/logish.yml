@@ -16,3 +16,10 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dotnet }}
+
+    - name: Visa GitHub- och runner-context
+      run: |
+        echo "GitHub context:"
+        echo "${{ toJSON(github) }}"
+        echo "Runner context:"
+        echo "${{ toJSON(runner) }}"
