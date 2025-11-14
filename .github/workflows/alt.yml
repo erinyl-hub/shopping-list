@@ -19,12 +19,17 @@ jobs:
           
       - name:  "code checkout"
         uses: actions/checkout@v5
+
         
       - name: "setup dotnet"
         uses: actions/setup-dotnet@v4
         with: 
           dotnet-version: ${{ matrix.version }}
       
+      - name: "get dependecies"
+        run: | 
+          dotnet restore
+        
       - name: "branch"
         run: |
           echo "build started"
@@ -34,7 +39,6 @@ jobs:
       - name: "Execute Test"
         if: success()
         run: |
-          dotnet restore
           dotnet test --no-build
 
       - name: "Build Failed"
