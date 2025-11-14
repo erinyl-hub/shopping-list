@@ -39,7 +39,7 @@ jobs:
       - name: "Execute Test"
         if: success()
         run: |
-          dotnet test --no-build
+          dotnet test
 
       - name: "Build Failed"
         if: failure()
