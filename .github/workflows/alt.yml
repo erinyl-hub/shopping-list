@@ -21,10 +21,13 @@ jobs:
     name: Pr info
     if: ${{ github.event.pull_request }}
     runs-on: ubuntu-latest
+    env:
+      PR_Num: ${{github.event.pull_request.number }}
+      PR_Actor: ${{ github.event.pull_request}}
     steps:
       - name: "pr_event"
         run: |
-           echo "pr"
+           echo "${{"
            
   main_push:
       name: Push Info
