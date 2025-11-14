@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: "Action checkout build"
         run: |
-          "echo ${{ toJSON(github.user) }} requested push to main"
+          echo "${{ toJSON(github.user) }} requested push to main"
           
       - name:  "Execute build"
       - uses: actions/checkout@v5
@@ -24,17 +24,17 @@ jobs:
       
       - name: "branch"
         run: |
-          "echo build started date +%D %T"
-          "dotnet build --configuration release"
-          "echo build ended date +%D %T"
+          echo "build started"
+          dotnet build --configuration release
+          
 
       - name: "Execute Test"
         if: success()
         run: |
-          "dotnet --restore"
-          "dotnet test --no-build"
+          dotnet --restore
+          dotnet test --no-build
 
       - name: "Build Failed"
         if: failure()
         run: |
-          "Build failed with the following errors (promise i'll capture the ouput eventually)"
+          echo "Build failed with the following errors (promise i'll capture the ouput eventually)"
