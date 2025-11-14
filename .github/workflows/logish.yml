@@ -10,9 +10,26 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         dotnet: [9.0.x, 8.0.x]
+    
+      
         
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+        
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dotnet }}
+
+    - name: Run tests
+      if: success()
+      run: dotnet test
+
+    - name: Visa GitHub- och runner-context
+      shell: bash
+      run: |
+        echo "GitHub context:"
+        echo "${{ toJSON(github) }}"
+        echo "Runner context:"
+        echo "${{ toJSON(runner) }}"
