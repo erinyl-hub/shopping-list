@@ -18,7 +18,16 @@ jobs:
       - name: "pr_event"
         run: |
            echo "pr"
-    
+           
+  main_push:
+      name: Push Info
+      runs-on: ubuntu-latest
+      if: ${{ github.event.branches.main }}
+      steps:
+        - name: "other_event"
+          run: |
+            echo "other"
+      
   build:
     runs-on: ${{ matrix.os }}
     strategy:
