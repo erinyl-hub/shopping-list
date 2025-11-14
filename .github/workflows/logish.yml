@@ -18,6 +18,7 @@ jobs:
         dotnet-version: ${{ matrix.dotnet }}
 
     - name: Visa GitHub- och runner-context
+      shell: bash
       run: |
         echo "GitHub context:"
         echo "${{ toJSON(github) }}"
