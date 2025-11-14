@@ -17,9 +17,11 @@ jobs:
         run: |
           echo "${{ toJSON(github.user) }} requested push to main"
           
-      - name:  "Execute build"
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v5
+      - name:  "code checkout"
+        uses: actions/checkout@v5
+        
+      - name: "setup dotnet"
+        uses: actions/setup-dotnet@v5
         with: ${{ matrix.version }}
       
       - name: "branch"
