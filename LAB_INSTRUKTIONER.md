@@ -72,7 +72,7 @@ Alla metoder i `ShoppingListService.cs` har TODO-kommentarer. Du behöver implem
 1. **Add(string name, int quantity, string? notes)** - ➕ Lägg till en ny artikel (expandera array om behövs) *
 2. **GetAll()** - 📋 Returnera alla artiklar *
 3. **GetById(string id)** - 🔍 Hitta en artikel med dess ID *
-5. **Delete(string id)** - 🗑️ Ta bort en artikel och flytta kvarvarande element
+   5. **Delete(string id)** - 🗑️ Ta bort en artikel och flytta kvarvarande element
 6. **Search(string query)** - 🔎 Sök efter namn/anteckningar (skiftlägesokänsligt)
 7. (optional - lätt)  **ClearPurchased()** - 🧹 Ta bort alla handlade artiklar
 4. (optional - lätt) **Update(string id, string name, int quantity, string? notes)** - ✏️ Uppdatera en befintlig artikel
