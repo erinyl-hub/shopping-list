@@ -33,7 +33,7 @@ jobs:
       - name: "branch"
         run: |
           echo "build started"
-          dotnet build --configuration release
+          dotnet build 
           
 
       - name: "Execute Test"
