@@ -23,6 +23,7 @@ jobs:
         dotnet-version: ${{ matrix.dotnet }}
 
     - name: Run tests
+      if: success()
       run: dotnet test
 
     - name: Visa GitHub- och runner-context
